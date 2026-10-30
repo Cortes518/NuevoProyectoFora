@@ -33,5 +33,5 @@ if (!readFileSync('vercel.json', 'utf8').includes(hash)) {
 }
 
 writeFileSync('dist/index.html', html);
-for (const dir of ['fonts', 'musica']) cpSync(dir, `dist/${dir}`, { recursive: true });
+for (const dir of ['fonts', 'musica', 'img', 'logo']) cpSync(dir, `dist/${dir}`, { recursive: true });
 console.log('dist/ listo');
