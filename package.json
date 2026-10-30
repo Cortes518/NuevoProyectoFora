@@ -1,0 +1,13 @@
+{
+  "name": "raices-del-flow",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Propuesta web de la serie documental musical Raíces del Flow",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "npx http-server . -p 5173 -c-1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}
