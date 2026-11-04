@@ -63,13 +63,13 @@ const SHOTS = {
     ['m9', 'Rapero con micrófono señalando a un costado, sobre fondo blanco'], ['m3', 'Escultura de bronce en una plaza, con un edificio histórico al fondo'], ['m7', 'Tres jóvenes caminando por un callejón con paredes de cuadros'],
     ['m1', 'Vista del centro de Medellín entre las montañas'], ['m8', 'Rapero cantando ante el público en un escenario al aire libre'], ['m4', 'Barrio de casas de ladrillo en una ladera'], ['m5', 'Plaza de un pueblo al atardecer bajo un cielo morado']] },
   cali: { cover: ['cali4', 'Orquesta en escena con clarinete, tuba y cantante bajo las luces del escenario'], gal: [
-    ['cali2', 'Pareja bailando salsa en un club frente a la orquesta, bajo un cartel de Salsa en vivo'], ['cali', 'Pareja bailando en plena calle, rodeada por el público'], ['cali3', 'Calle de casas coloridas con balcones y flores'], ['otra2', 'Manos con pulseras de cuentas sobre el cuero de un tambor']] },
+    ['cali2', 'Pareja bailando salsa en un club frente a la orquesta, bajo un cartel de Salsa en vivo'], ['cali', 'Pareja bailando en plena calle, rodeada por el público'], ['cali3', 'Calle de casas coloridas con balcones y flores']] },
   bogota: { cover: ['bogota2', 'Edificios de ladrillo iluminados al anochecer, con la calle mojada por la lluvia'], gal: [
     ['bg', 'Callejón de ladrillo y adoquines mojados, con una escultura en lo alto y gente caminando'], ['bogota3', 'Hombre pintando con aerosol un muro cubierto de grafiti de colores']] },
   buenaventura: { cover: ['b3', 'Casas sobre palafitos junto al mar bajo un cielo de tormenta'], gal: [
     ['b5', 'Muelle de madera sobre el agua, con un niño caminando'], ['b1', 'Músicos tocando marimba y percusión, con un cantante en primer plano'], ['b', 'Cuatro cantoras con vestidos blancos y sombreros en un escenario'], ['b2', 'Cantante con atuendo azul estampado sobre un escenario amarillo']] },
   condoto: { cover: ['c1', 'Río con palmeras y casas de madera en la orilla'], gal: [
-    ['c6', 'Vista aérea de un pueblo rodeado por un río'], ['c2', 'Músicos con marimba y tambores en un corredor frente al río'], ['c0', 'Niño frente a un mural en una pared'], ['c', 'Gente reunida en la orilla arenosa de un río'], ['c5', 'Comparsa de bailarines con trajes verdes y naranjas desfilando por la calle']] },
+    ['c6', 'Vista aérea de un pueblo rodeado por un río'], ['c2', 'Músicos con marimba y tambores en un corredor frente al río'], ['c0', 'Niño frente a un mural en una pared'], ['otra2', 'Manos con pulseras de cuentas sobre el cuero de un tambor'], ['c', 'Gente reunida en la orilla arenosa de un río'], ['c5', 'Comparsa de bailarines con trajes verdes y naranjas desfilando por la calle']] },
 };
 const pic = (id, alt, sizes) => {
   const [w, h, ws] = PH[id];
@@ -77,7 +77,7 @@ const pic = (id, alt, sizes) => {
 };
 const cover = c => SHOTS[c.id]?.cover ? `<figure class="cover">${pic(...SHOTS[c.id].cover, '100vw')}</figure>` : '';
 const gallery = c => SHOTS[c.id] ? `<div class="gal">${SHOTS[c.id].gal.map(([id, alt], k) =>
-  `<figure class="ph rv" style="--r:${(PH[id][0] / PH[id][1]).toFixed(3)};--d:${k % 3 * 90}ms">${pic(id, alt, '(max-width:820px) 50vw,33vw')}</figure>`).join('')}</div>` : '';
+  `<figure class="ph rv" style="--r:${Math.max(PH[id][0] / PH[id][1], .75).toFixed(3)};--d:${k % 3 * 90}ms">${pic(id, alt, '(max-width:820px) 50vw,33vw')}</figure>`).join('')}</div>` : '';
 
 const MOV = [
   ['El artista que llega', 'Conocemos a Rioloz, su historia, su música, sus influencias y las preguntas que lo traen a Colombia.', '#ff2e88'],
