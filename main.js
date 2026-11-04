@@ -56,12 +56,13 @@ const COLOR = { medellin: '#ff2e88', cali: '#ffc21a', bogota: '#7fb0d6', buenave
 
 /* ================= FOTOS ================= */
 // id: [ancho, alto, anchos exportados]. Lo genera optimizar-imagenes.py a partir de assets/
-const PH = {b:[1920,1229,[640,1280,1920]],b1:[1920,1280,[640,1280,1920]],b2:[1920,1282,[640,1280,1920]],b3:[1920,1280,[640,1280,1920]],b5:[1920,1280,[640,1280,1920]],c0:[1440,1920,[640,1440]],c:[1706,1279,[640,1280,1706]],c1:[1920,1441,[640,1280,1920]],c2:[1072,1921,[640,1072]],c5:[1920,1263,[640,1280,1920]],c6:[1920,990,[640,1280,1920]],m1:[1920,1440,[640,1280,1920]],m2:[1920,1282,[640,1280,1920]],m3:[1920,1280,[640,1280,1920]],m4:[678,452,[678]],m5:[1920,1281,[640,1280,1920]],m7:[1280,1920,[640,1280]],m8:[678,452,[678]],m9:[1920,1440,[640,1280,1920]]};
+const PH = {bg:[1200,1600,[640,1200]],b:[1920,1229,[640,1280,1920]],b1:[1920,1280,[640,1280,1920]],b2:[1920,1282,[640,1280,1920]],b3:[1920,1280,[640,1280,1920]],b5:[1920,1280,[640,1280,1920]],c0:[1440,1920,[640,1440]],c:[1706,1279,[640,1280,1706]],c1:[1920,1441,[640,1280,1920]],c2:[1072,1921,[640,1072]],c5:[1920,1263,[640,1280,1920]],c6:[1920,990,[640,1280,1920]],m1:[1920,1440,[640,1280,1920]],m2:[1920,1282,[640,1280,1920]],m3:[1920,1280,[640,1280,1920]],m4:[678,452,[678]],m5:[1920,1281,[640,1280,1920]],m7:[1280,1920,[640,1280]],m8:[678,452,[678]],m9:[1920,1440,[640,1280,1920]]};
 // portada y galería de cada capítulo (el prefijo del archivo indica la ciudad: m, b, c). Cali y Bogotá aún no tienen fotos
 const SHOTS = {
   medellin: { cover: ['m2', 'Cabinas del Metrocable sobre los barrios de Medellín'], gal: [
     ['m9', 'Rapero con micrófono señalando a un costado, sobre fondo blanco'], ['m3', 'Escultura de bronce en una plaza, con un edificio histórico al fondo'], ['m7', 'Tres jóvenes caminando por un callejón con paredes de cuadros'],
     ['m1', 'Vista del centro de Medellín entre las montañas'], ['m8', 'Rapero cantando ante el público en un escenario al aire libre'], ['m4', 'Barrio de casas de ladrillo en una ladera'], ['m5', 'Plaza de un pueblo al atardecer bajo un cielo morado']] },
+  bogota: { gal: [['bg', 'Callejón de ladrillo y adoquines mojados, con una escultura en lo alto y gente caminando']] },
   buenaventura: { cover: ['b3', 'Casas sobre palafitos junto al mar bajo un cielo de tormenta'], gal: [
     ['b5', 'Muelle de madera sobre el agua, con un niño caminando'], ['b1', 'Músicos tocando marimba y percusión, con un cantante en primer plano'], ['b', 'Cuatro cantoras con vestidos blancos y sombreros en un escenario'], ['b2', 'Cantante con atuendo azul estampado sobre un escenario amarillo']] },
   condoto: { cover: ['c1', 'Río con palmeras y casas de madera en la orilla'], gal: [
@@ -71,8 +72,8 @@ const pic = (id, alt, sizes) => {
   const [w, h, ws] = PH[id];
   return `<img src="img/${id}-${ws[ws.length - 1]}.webp" srcset="${ws.map(x => `img/${id}-${x}.webp ${x}w`).join(',')}" sizes="${sizes}" width="${w}" height="${h}" alt="${alt}" loading="lazy" decoding="async">`;
 };
-const cover = c => SHOTS[c.id] ? `<figure class="cover">${pic(...SHOTS[c.id].cover, '100vw')}</figure>` : '';
-const gallery = c => SHOTS[c.id] ? `<div class="gal">${SHOTS[c.id].gal.map(([id, alt], k) =>
+const cover = c => SHOTS[c.id]?.cover ? `<figure class="cover">${pic(...SHOTS[c.id].cover, '100vw')}</figure>` : '';
+const gallery = c => SHOTS[c.id] ? `<div class="gal${SHOTS[c.id].gal.length === 1 ? ' solo' : ''}">${SHOTS[c.id].gal.map(([id, alt], k) =>
   `<figure class="ph rv" style="--r:${(PH[id][0] / PH[id][1]).toFixed(3)};--d:${k % 3 * 90}ms">${pic(id, alt, '(max-width:820px) 50vw,33vw')}</figure>`).join('')}</div>` : '';
 
 const MOV = [

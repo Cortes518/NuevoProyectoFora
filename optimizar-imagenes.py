@@ -5,7 +5,7 @@ from PIL import Image, ImageCms, ImageOps
 
 Image.MAX_IMAGE_PIXELS = None
 ANCHOS = (640, 1280, 1920)
-RENOMBRAR = {'c.jpeg': 'c0'}  # c.jpeg y c.jpg compartirían nombre
+RENOMBRAR = {'c.jpeg': 'c0', 'Bogota img.jfif': 'bg'}  # c.jpeg y c.jpg compartirían nombre; el otro tiene un espacio
 LOGOS = {'20.png': 'fora-visual', '25.png': 'fora-sello'}  # versiones blancas con transparencia: la web las tiñe con CSS
 SRGB = ImageCms.createProfile('sRGB')
 
