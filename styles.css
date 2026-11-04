@@ -302,6 +302,7 @@ h3{font:400 1.6rem/1.1 var(--disp);text-transform:uppercase;letter-spacing:.02em
 .final footer .fr{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem 2rem}
 .final footer .fora{width:8.5rem;color:var(--fg)}
 .final footer p{margin-top:1.6rem}
+.alias{display:block;margin:-.3rem 0 .9rem;text-transform:none;letter-spacing:0;font:italic 700 1.15rem/1 var(--serif);color:var(--ac)}
 
 /* ---------- Fotos ---------- */
 /* El tono de cada foto se acerca a la paleta de su territorio (--ac cambia con el capítulo); al pasar el cursor recupera su color */
