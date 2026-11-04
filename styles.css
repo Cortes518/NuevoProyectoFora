@@ -313,24 +313,27 @@ h3{font:400 1.6rem/1.1 var(--disp);text-transform:uppercase;letter-spacing:.02em
 /* paralaje con el scroll solo donde el navegador lo soporta; sin soporte la foto queda quieta */
 @keyframes parallax{from{transform:scale(1.2) translateY(-6%)}to{transform:scale(1.2) translateY(6%)}}
 @supports(animation-timeline:view()){.cover img{animation:parallax linear both;animation-timeline:view()}}
-/* galería justificada: cada fila reparte el ancho según la proporción de sus fotos y queda a una sola altura */
-.gal{--h:17rem;display:flex;flex-wrap:wrap;gap:.8rem;margin-top:4.5rem}
-.gal::after{content:'';flex-grow:1000000}
-.gal.solo .ph{flex:0 1 min(100%,24rem)}
-.ph{position:relative;margin:0;border-radius:1rem;overflow:hidden;aspect-ratio:var(--r);flex-grow:calc(var(--r) * 100);flex-basis:calc(var(--r) * var(--h))}
+/* galería justificada: cada fila reparte el ancho según la proporción de sus fotos y queda a una sola altura.
+   Ninguna pasa de 30rem de alto: una foto suelta en la última fila queda centrada en vez de ocupar todo el ancho */
+.gal{--h:17rem;display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;margin-top:4.5rem}
+.ph{position:relative;margin:0;border-radius:1rem;overflow:hidden;aspect-ratio:var(--r);flex-grow:calc(var(--r) * 100);flex-basis:calc(var(--r) * var(--h));max-width:calc(var(--r) * 30rem)}
 .ph img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.85) contrast(1.04);transition:filter .6s,transform .9s cubic-bezier(.2,.7,.2,1)}
 .ph::after{content:'';position:absolute;inset:0;background:var(--ac);mix-blend-mode:soft-light;opacity:.3;pointer-events:none;transition:opacity .6s}
 .ph:hover img{filter:none;transform:scale(1.05)}
 .ph:hover::after{opacity:0}
 /* pilares del concepto: la foto asoma detrás y gana presencia al expandirse */
-.pillar{position:relative}
-.pillar>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.32;filter:grayscale(.5);transition:opacity .7s,filter .7s,transform 1.2s cubic-bezier(.2,.7,.2,1)}
-.pillar::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(color-mix(in srgb,var(--bg) 80%,transparent),transparent 45%,color-mix(in srgb,var(--bg) 70%,transparent))}
-.pillar>:not(img){position:relative;z-index:2}
-.pillar:hover>img,.pillar:focus>img,.pillars:not(:hover):not(:focus-within) .pillar:first-child>img{opacity:.6;filter:none;transform:scale(1.06)}
+.pillar,.card.pic{position:relative}
+.card.pic{overflow:hidden}
+.pillar>img,.card.pic>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.32;filter:grayscale(.5);transition:opacity .7s,filter .7s,transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.pillar::after,.card.pic::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(color-mix(in srgb,var(--bg) 80%,transparent),transparent 45%,color-mix(in srgb,var(--bg) 70%,transparent))}
+.pillar>:not(img),.card.pic>:not(img){position:relative;z-index:2}
+.pillar:hover>img,.pillar:focus>img,.pillars:not(:hover):not(:focus-within) .pillar:first-child>img,.card.pic:hover>img{opacity:.6;filter:none;transform:scale(1.06)}
+.card.pic p:not(.label){color:var(--fg)}
+.card.pic>img{opacity:.5}
+.d-bogota .cover img{object-position:50% 72%}
 .pillar:hover p,.pillar:focus p,.pillars:not(:hover):not(:focus-within) .pillar:first-child p{color:var(--fg)}
 @media(max-width:820px){
-  .gal{--h:6.4rem;gap:.5rem;margin-top:2.5rem}
+  .gal{--h:8rem;gap:.5rem;margin-top:2.5rem}
   .ph{border-radius:.8rem}
   .cover{height:clamp(24rem,64svh,34rem)}
   .fora-band{flex-direction:column;align-items:flex-start}
