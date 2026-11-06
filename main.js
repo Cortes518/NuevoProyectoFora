@@ -303,11 +303,11 @@ const frame = t => {
 };
 if (reduce) { drawWave(0); drawViz(0); } else requestAnimationFrame(frame);
 
-/* ================= MÚSICA DE CADA CIUDAD (musica/*.mp3, 1:15 en bucle) ================= */
-const FILE = { medellin: 'Medellin', cali: 'Cali', bogota: 'Bogota', buenaventura: 'Buenaventura', condoto: 'Condoto' };
+/* ================= MÚSICA (musica/*.mp3): la de cada ciudad (1:15) y la pasiva (3:13), todas en bucle ================= */
+const FILE = { medellin: 'Medellin', cali: 'Cali', bogota: 'Bogota', buenaventura: 'Buenaventura', condoto: 'Condoto', pasiva: 'Pasiva' };
 const music = new Audio(); music.loop = true; music.volume = 0;
-const MAXV = .75;
-let want = false, track = null, fadeT, syncT;
+const MAXV = .75, VOL = { pasiva: .45 }; // la pasiva va más baja; el archivo ya se grabó con -6 dB para que también lo esté en iOS
+let want = false, track = null, fadeT, syncT, calmAt = 0;
 // shortcut: iOS ignora audio.volume, ahí el cambio entre canciones es un corte y no un fundido
 const fade = (to, ms, done) => {
   clearInterval(fadeT);
@@ -323,16 +323,18 @@ const ui = () => {
   $('#snd').setAttribute('aria-label', want ? 'Silenciar música' : 'Activar música');
   $('#enter-t').textContent = want ? 'Música activada' : 'Activar música';
 };
-// suena la canción de la ciudad cuya sección está en pantalla; en las demás secciones se silencia
+// suena la canción de la ciudad cuya sección está en pantalla; en las demás, la pasiva (retoma donde iba).
+// Con un boceto del analizador sonando, la música se calla
 const doSync = () => {
-  const id = want && !document.hidden && FILE[cur] ? cur : null;
+  const id = want && !document.hidden && !playing ? (FILE[cur] ? cur : 'pasiva') : null;
   if (id === track) return;
   track = id;
   fade(0, music.paused ? 1 : 500, () => {
+    if (music.src.endsWith(`/${FILE.pasiva}.mp3`)) calmAt = music.currentTime;
     if (!id) return music.pause();
     const src = `musica/${FILE[id]}.mp3`;
-    if (!music.src.endsWith(src)) music.src = src;
-    music.play().then(() => { if (track === id) fade(MAXV, 900); })
+    if (!music.src.endsWith(src)) { music.src = src; if (id === 'pasiva') music.currentTime = calmAt; }
+    music.play().then(() => { if (track === id) fade(VOL[id] ?? MAXV, id === 'pasiva' ? 2500 : 900); })
       .catch(e => { if (e.name === 'NotAllowedError') { want = false; track = null; ui(); } });
   });
 };
@@ -341,7 +343,7 @@ const toggleMusic = () => {
   want = !want; ui();
   if (want) {
     // el navegador exige reproducir dentro del gesto del usuario; se "desbloquea" aquí y doSync decide qué suena
-    if (!music.src) music.src = 'musica/Medellin.mp3';
+    if (!music.src) music.src = `musica/${FILE.pasiva}.mp3`;
     music.volume = 0; music.play().catch(() => {});
     track = -1;
   }
@@ -411,6 +413,7 @@ const tick = () => {
 const stop = () => {
   clearInterval(timer); playing = null; lock = false; applyTheme();
   $$('.pad').forEach(p => p.setAttribute('aria-pressed', 'false'));
+  syncSoon(); // vuelve la música de fondo
 };
 $('#pads').innerHTML = CH.map(c => `<button class="pad fd"style="--c:${COLOR[c.id]}" data-id="${c.id}" aria-pressed="false"><h3>${c.city}</h3><small>${PAT[c.id].sub}</small><i>Escuchar</i></button>`).join('');
 $$('.pad').forEach(b => io.observe(b));
@@ -424,6 +427,7 @@ $$('.pad').forEach(b => b.addEventListener('click', async () => {
   lock = b.dataset.id; applyTheme();
   step = 0; nextT = ac.currentTime + .05;
   timer = setInterval(tick, 25);
+  doSync(); // calla la música de fondo mientras suena el boceto
 }));
 document.addEventListener('visibilitychange', () => { if (document.hidden && playing) stop(); });
 })();
