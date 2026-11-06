@@ -281,7 +281,7 @@ h3{font:400 1.6rem/1.1 var(--disp);text-transform:uppercase;letter-spacing:.02em
 /* ---------- Marca: logo de la serie y de la productora ---------- */
 .brand{display:inline-flex;align-items:center;gap:.7em;font-size:1rem;letter-spacing:0;text-transform:none;text-decoration:none}
 .mark{width:1.9em;height:2.18em;flex:none;overflow:visible}
-.wm{display:flex;flex-direction:column;line-height:1}
+.wm{line-height:1}
 .wm b{font:400 1.45em/1 var(--disp);letter-spacing:.06em}
 .top .brand{font-size:.95rem}
 .fr .brand{font-size:1.7rem;--mk1:var(--ac);--mk2:var(--fg)}
