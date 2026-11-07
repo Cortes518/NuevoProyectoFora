@@ -131,6 +131,29 @@ $('#cards').innerHTML = VZ.map(([id, t, d, c1, c2], i) => `<article class="vcard
 /* letras del título */
 $('#raices').innerHTML = [...'RAÍCES'].map((l, i) => `<span style="--i:${i}">${l}</span>`).join('');
 
+/* Rioloz: el nombre se llena solo, una vez por visita, y mientras se llena la página no se desplaza */
+const nm = $('#rlname');
+nm.innerHTML = [...nm.textContent].map((l, i) => `<span aria-hidden="true" style="--i:${i}">${l}</span>`).join('');
+const KEYS = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
+const hold = e => { if (e.type !== 'keydown' || KEYS.includes(e.key)) e.preventDefault(); };
+const lockScroll = on => {
+  document.documentElement.classList.toggle('lock', on);
+  ['wheel', 'touchmove', 'keydown'].forEach(t => window[on ? 'addEventListener' : 'removeEventListener'](t, hold, { passive: false }));
+};
+const nameIO = new IntersectionObserver(([e]) => {
+  if (!e.isIntersecting) return;
+  nameIO.disconnect();
+  if (reduce) return nm.classList.add('done'); // sin animación ni bloqueo para quien pide menos movimiento
+  let t;
+  const end = () => { clearTimeout(t); lockScroll(false); nm.classList.add('done'); };
+  nm.lastElementChild.addEventListener('animationend', a => a.animationName === 'sheen' && end());
+  t = setTimeout(end, 4500); // respaldo: si la animación no llega a terminar (pestaña oculta), la página se libera igual
+  lockScroll(true);
+  nm.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  nm.classList.add('go');
+}, { threshold: .95, rootMargin: '0px 0px -10% 0px' });
+nameIO.observe(nm);
+
 /* texto de sinopsis palabra por palabra (conserva los <em>) */
 const wrapWords = el => [...el.childNodes].forEach(n => {
   if (n.nodeType === 3) n.replaceWith(...n.textContent.split(/(\s+)/).map(t => {
